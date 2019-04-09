@@ -80,10 +80,6 @@ docker_compose_cmd = ['C:\\Windows\\System32\\bash.exe', '-c', '{0} docker-compo
     )
 ]
 
-print('The docker-compose bash variable(s) were: {0}'.format(bash_variables))
-print('The docker-compose argument(s) were: {0}'.format(docker_compose_cli_args))
-print('The docker-compose command was: {0}'.format(' '.join(docker_compose_cmd)))
-
 # Run the docker-compose binary in bash on WSL with the appropriate argument(s)
 docker_compose_process = subprocess.Popen(docker_compose_cmd, shell=True)
 
