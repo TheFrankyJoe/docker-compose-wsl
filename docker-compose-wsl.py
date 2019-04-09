@@ -53,24 +53,24 @@ for key, value in os.environ.items():
 
 # Replace Windows path with WSL supported path
 for idx, cli_arg in enumerate(cli_args):
+    windows_file_path = cli_arg
 
     if idx != 0 and cli_args[idx - 1] == '-f':
         compose_file = cli_arg
         compose_file_name = os.path.basename(compose_file)
-        tmp_compose_file = os.path.join(compose_file_tmp_dir, compose_file_name)
+        windows_file_path = os.path.join(compose_file_tmp_dir, compose_file_name)
 
         if os.path.isfile(compose_file):
             compose_file_content = pathlib.Path(compose_file).read_text()
             new_compose_file_content = wsl_drive_map(compose_file_content)
-            pathlib.Path(tmp_compose_file).write_text(new_compose_file_content)
+            pathlib.Path(windows_file_path).write_text(new_compose_file_content)
         else:
             sys.stderr.write('The PyCharm docker-compose file "{0}" does not exists, exiting...'.format(
                 compose_file))
             raise SystemExit(1)
 
-        compose_file_mapped = wsl_drive_map(tmp_compose_file)
-        docker_compose_cli_args += '{0} '.format(compose_file_mapped)
-
+    if os.path.exists(windows_file_path):
+        docker_compose_cli_args += '{0} '.format(wsl_drive_map(windows_file_path))
     else:
         docker_compose_cli_args += '{0} '.format(cli_arg)
 
@@ -85,4 +85,9 @@ print('The docker-compose argument(s) were: {0}'.format(docker_compose_cli_args)
 print('The docker-compose command was: {0}'.format(' '.join(docker_compose_cmd)))
 
 # Run the docker-compose binary in bash on WSL with the appropriate argument(s)
-subprocess.run(docker_compose_cmd, shell=True)
+docker_compose_process = subprocess.Popen(docker_compose_cmd, shell=True)
+
+try:
+    docker_compose_process.wait()
+except KeyboardInterrupt:
+    docker_compose_process.terminate()
