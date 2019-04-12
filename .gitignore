@@ -2,4 +2,3 @@
 __pycache__/
 build/
 dist/
-docker-compose-wsl.spec
