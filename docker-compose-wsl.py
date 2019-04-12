@@ -80,10 +80,7 @@ docker_compose_cmd = ['C:\\Windows\\System32\\bash.exe', '-c', '{0} docker-compo
     )
 ]
 
-# Run the docker-compose binary in bash on WSL with the appropriate argument(s)
-docker_compose_process = subprocess.Popen(docker_compose_cmd, shell=True)
-
 try:
-    docker_compose_process.wait()
+    subprocess.run(docker_compose_cmd)
 except KeyboardInterrupt:
-    docker_compose_process.terminate()
+    pass
