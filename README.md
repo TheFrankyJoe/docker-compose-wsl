@@ -37,7 +37,7 @@ This tool should work with any IDE that use the docker-compose command-line tool
 
 6. Run PyInstaller in order to create the binary
 
-       (docker-compose-wsl) > pyinstaller --onefile .\docker-compose-wsl.py
+       (docker-compose-wsl) > pyinstaller --onefile .\docker-compose-wsl.spec
        
 7. The binary will be available in the **dist** directory
 
